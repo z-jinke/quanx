@@ -1,7 +1,7 @@
 const { body } = $response;
-const { query:ip } = JSON.parse(body);
+const { countryCode,query:ip } = JSON.parse(body);
 
 const title= ` `;
-const subtitle = `IP地址:${ip}`;
+const subtitle = `IP:${ip} 地区${countryCode}`;
 
 $done({ title,subtitle,ip });
