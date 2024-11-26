@@ -1,4 +1,5 @@
 hostname = *.spotify.com
 
+^https?:\/\/spclient\.wg\.spotify\.com\/(artistview\/v1\/artist|album-entity-view\/v2\/album)\/ url script-request-header https://github.com/z-jinke/quanx/raw/refs/heads/main/scripts/spotify-url.js
 ^https?:\/\/spclient\.wg\.spotify\.com\/bootstrap\/v1\/bootstrap url script-response-body https://github.com/z-jinke/quanx/raw/refs/heads/main/scripts/spotify.js
 ^https?:\/\/spclient\.wg\.spotify\.com\/user-customization-service\/v1\/customize url script-response-body https://github.com/z-jinke/quanx/raw/refs/heads/main/scripts/spotify.js
