@@ -3,40 +3,33 @@ const spotifyJson = {"options":{"java_package":"com.smile.spotify.model"},"neste
 
 const url = $request.url;
 const method = $request.method;
+const postMethod = "POST";
 const binaryBody = new Uint8Array($response.bodyBytes);
+let accountAttributesMapObj;
 let body;
 
-if (method === "POST") {
-    if (url.includes("bootstrap/v1/bootstrap")) {
-        handleProtobuf("BootstrapResponse", "ucsResponseV0.success.customization.success.accountAttributesSuccess.accountAttributes");
-    } else if (url.includes("user-customization-service/v1/customize")) {
-        handleProtobuf("UcsResponseWrapper", "success.accountAttributesSuccess.accountAttributes");
+if (url.includes("bootstrap/v1/bootstrap") && method === postMethod) {
+    let bootstrapResponseType = protobuf.Root.fromJSON(spotifyJson).lookupType("BootstrapResponse");
+    let bootstrapResponseObj = bootstrapResponseType.decode(binaryBody);
+    accountAttributesMapObj = bootstrapResponseObj.ucsResponseV0?.success?.customization?.success?.accountAttributesSuccess?.accountAttributes;
+    if (accountAttributesMapObj) {
+        processMapObj(accountAttributesMapObj);
+        body = bootstrapResponseType.encode(bootstrapResponseObj).finish();
+    }
+} else if (url.includes("user-customization-service/v1/customize") && method === postMethod) {
+    let ucsResponseWrapperType = protobuf.Root.fromJSON(spotifyJson).lookupType("UcsResponseWrapper");
+    let ucsResponseWrapperMessage = ucsResponseWrapperType.decode(binaryBody);
+    accountAttributesMapObj = ucsResponseWrapperMessage?.success?.accountAttributesSuccess?.accountAttributes;
+    if (accountAttributesMapObj) {
+        processMapObj(accountAttributesMapObj);
+        body = ucsResponseWrapperType.encode(ucsResponseWrapperMessage).finish();
     }
 }
 
 $done({ bodyBytes: body?.buffer?.slice(body.byteOffset, body.byteLength + body.byteOffset) });
 
-function handleProtobuf(messageType, pathToAttributes) {
-    try {
-        const root = protobuf.Root.fromJSON(spotifyJson); // 加载 Protobuf 定义
-        const responseType = root.lookupType(messageType); // 获取消息类型
-        const decodedMessage = responseType.decode(binaryBody); // 解码二进制数据
-        const accountAttributesMapObj = getNestedProperty(decodedMessage, pathToAttributes); // 获取目标字段
-
-        if (accountAttributesMapObj) {
-            updateAttributes(accountAttributesMapObj); // 更新字段
-            body = responseType.encode(decodedMessage).finish(); // 重新编码为二进制
-        }
-    } catch (e) {
-    }
-}
-
-function getNestedProperty(obj, path) {
-    return path.split('.').reduce((acc, key) => (acc && acc[key] ? acc[key] : null), obj);
-}
-
-function updateAttributes(accountAttributesMapObj) {
-    const attributes = {
+function processMapObj(accountAttributesMapObj) {
+    const attributeUpdates = {
         'player-license': { stringValue: 'premium' },
         'mobile': { boolValue: true },
         'streaming-rules': { stringValue: '' },
@@ -61,9 +54,15 @@ function updateAttributes(accountAttributesMapObj) {
         'shuffle-eligible': { boolValue: true },
         'unrestricted': { boolValue: true },
         'com.spotify.madprops.use.ucs.product.state': { boolValue: true },
-        'premium-status': { stringValue: 'enabled' },
-        'feature-flags': { stringValue: 'all' }
+        'ab-test-group': { longValue: 67 },
+        'ab-mobile-discover': { longValue: 0 },
+        'ab-navigation-menu': { longValue: 17 },
+        'ab-sugarpills-sanity-check': { stringValue: '0' },
+        'ab-nft-navigation-menu': { stringValue: '3' },
+        'ab-desktop-hide-follow': { boolValue: false }
     };
 
-    Object.assign(accountAttributesMapObj, attributes); 
+    Object.assign(accountAttributesMapObj, attributeUpdates);
+    delete accountAttributesMapObj['ad-use-adlogic'];
+    delete accountAttributesMapObj['ad-catalogues'];
 }
