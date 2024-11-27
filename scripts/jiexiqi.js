@@ -2,10 +2,10 @@
 功能概述
 •支持多种格式的订阅转换为 Quantumult X 格式。
 •格式包括：V2RayN、SS(R/D)、HTTP(S)、Trojan、VLess、Quantumult(X)、Surge、Clash、Shadowrocket、Loon。
-•支持个性化参数配置，如筛选、重命名等。
 •在 订阅链接 后添加 # 使用。多个参数用 & 分隔
 
 使用说明
+•ntf=0/1    |关闭/开启通知提示
 •emoji=1/-1 |添加/删除节点名称中的地区旗帜（国行设备用 2)
 •udp=1/-1   |强制开启/关闭 UDP-Relay。
 •tfo=1/-1   |开启/关闭 Fast-Open。
@@ -14,10 +14,6 @@
 •in/out     |节点保留/删除（仅匹配名称）。多关键词用 +（或逻辑）或 .（与逻辑）
 •rename     |重命名节点，格式为 旧名@新名、前缀@、@后缀。多个参数用 + 连接。
 •replace    |正则替换节点字段，用于更改加密方式等。
-
-其他参数
-•ntf=0/1    |关闭/开启通知提示（默认重写和分流规则通知开启）
-•type=      |强制指定资源类型（如 rule、module、list）
 */
 
 let [link0, content0, subinfo] = [$resource.link, $resource.content, $resource.info]
