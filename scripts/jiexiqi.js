@@ -1,24 +1,46 @@
 /**
-1 节点/修改
-• emoji ：(1)开启（-1)关闭 国旗显示
-• udp ：(1)开启 (-1)关闭 UDP协议
-• tfo ：(1)开启 (-1)关闭 TCP协议
-• in ：节点匹配保留多个参数可以用`+`连接进行
-• out ：节点匹配删除多个参数可以用`+`连接进行
-• regex ：节点正则保留多个参数可以用`+`连接进行
-• regout ：节点正则删除多个参数可以用`+`连接进行
-• rename ：节点关键字重名"旧名@新名"多个操作用`+`连接
-• delreg ：关键字删除节点中的字段名称
-*/
+功能概述
+•	支持多种格式的订阅转换为 Quantumult X 格式。
+•	格式包括：V2RayN、SS(R/D)、HTTP(S)、Trojan、VLess、Quantumult(X)、Surge、Clash、Shadowrocket、Loon。
+•	支持个性化参数配置，如筛选、重命名等。
+• 在 订阅链接 后添加 # 使用。多个参数用 & 分隔
 
+使用说明
+•	emoji=1/-1 |添加/删除节点名称中的地区旗帜（国行设备用 2)
+•	udp=1/-1   |强制开启/关闭 UDP-Relay。
+•	tfo=1/-1   |开启/关闭 Fast-Open。
+•	uot=1      |开启 UDP over TCP，仅适用于 SS(R)
+•	cert=1/-1  |开启/关闭 TLS 证书验证（默认关闭）。
+•	in/out     |节点保留/删除（仅匹配名称）。多关键词用 +（或逻辑）或 .（与逻辑）
+•	rename     |重命名节点，格式为 旧名@新名、前缀@、@后缀。多个参数用 + 连接。
+•	replace    |正则替换节点字段，用于更改加密方式等。
+
+其他参数
+•	ntf=0/1    |关闭/开启通知提示（默认重写和分流规则通知开启）
+•	type=      |强制指定资源类型（如 rule、module、list）
+*/
 
 let [link0, content0, subinfo] = [$resource.link, $resource.content, $resource.info]
 let version = typeof $environment != "undefined" ? Number($environment.version.split("build")[1]): 0 // 版本号
 let Perror = 0 //错误类型
 
+const ADDRes = `quantumult-x:///add-resource?remote-resource=url-encoded-json`
+var RLink0 = {
+  "filter_remote": [],
+  "rewrite_remote": [],
+  "server_remote": [],
+}
+const Field = {
+  "filter" : "filter_remote",
+  "rewrite": "rewrite_remote",
+  "server" : "server_remote"
+}  
+
 const subtag = typeof $resource.tag != "undefined" ? $resource.tag : "";
 ////// 非 raw 链接的沙雕情形
 content0 = content0.indexOf("DOCTYPE html") != -1 && link0.indexOf("github.com") != -1 ? ToRaw(content0) : content0 ;
+// loon插件链接
+content0 = link0.indexOf("nsloon.com/openloon/import?plugin=") != -1 ? ToLink(link0) : content0 ;
 //ends 正常使用部分，調試註釋此部分
 
 
@@ -45,17 +67,6 @@ const plink0 = {"open-url" : link0, "media-url": qxpng} // 跳转订阅链接
 
 if(version == 0) { $notify("⚠️ 请更新 Quantumult X 至最新商店版本\n","🚦 当前版本可能无法正常使用部分功能","\n👉 点击跳转商店链接更新",update_link) }
 
-const ADDRes = `quantumult-x:///add-resource?remote-resource=url-encoded-json`
-var RLink0 = {
-  "filter_remote": [],
-  "rewrite_remote": [],
-  "server_remote": [],
-}
-const Field = {
-  "filter" : "filter_remote",
-  "rewrite": "rewrite_remote",
-  "server" : "server_remote"
-}  
 
 
 SubFlow() //流量通知
@@ -216,7 +227,7 @@ var flag = 1
 function Parser() {
   type0 = Type_Check(content0); //  类型判断
   //$notify(type0)
-  if (type0 != "web" && type0 != "wrong-field" && type0 != "JS-0"){
+  if (type0 != "web" && type0 != "wrong-field" && type0 != "JS-0" && type0 != "wrong-link"){
     try {
       //$notify(type0,"hh")
       if (Pdbg){
@@ -572,7 +583,10 @@ function Type_Check(subs) {
     } else if (typeQ =="server" && subs.length>100) { // 一些未知的b64 encode server case
       typec="server-b64-unknown"
       type = (typeQ == "unsupported" || typeQ =="server")? "Subs-B64Encode":"wrong-field"
-    } //else if (typeQ == "URI")
+    } else if(subs == "wrong-link") {
+      type="wrong-link"
+    }
+    //else if (typeQ == "URI")
   // 用于通知判断类型，debug
   if(typeU == "X"){
     $notify("该链接判定类型",type+" : " +typec, subs)
@@ -835,6 +849,18 @@ function ToRaw(cnt) {
     $notify( "⚠️⚠️ 解析该资源" + " ⟦" + subtag + "⟧ 失败" , "🚥 你的链接似乎是目录，而不是文件" , "❌ 你的链接："+link0, {"open-url":link0})
   }
   return cnt
+}
+
+function ToLink(link) {
+  cnt = link.split("nsloon.com/openloon/import?plugin=")[1]
+  if (cnt) {
+    
+    typ=$resource.type
+    RLink0[Field[typ]].push(cnt+", opt-parser=true, tag=🉑️长点❤️8⃣️") //  跳转URI-Scheme
+    flink = ADDRes.replace(/url-encoded-json/,encodeURIComponent(JSON.stringify(RLink0)))
+    $notify( "⚠️ 请点击通知跳转尝试添加正确链接" , "🚥 请正确使用原始链接" , "❌ 你的链接："+link0+"\n✅ 正确链接："+cnt, {"open-url":flink})
+  } 
+  return "wrong-link"
 }
 
 function CDN(cnt) {
