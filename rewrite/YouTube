@@ -1,0 +1,4 @@
+hostname = *.googlevideo.com,*.googleapis.com
+
+^https:\/\/[\w-]+\.googlevideo\.com\/initplayback\?.*?\boad=\d+ reject-200
+^https:\/\/youtubei\.googleapis\.com\/youtubei\/v1\/(?:browse|next|player|search|reel\/reel_watch_sequence|guide|account\/get_setting|get_watch) script-response-body https://raw.githubusercontent.com/Maasea/sgmodule/master/Script/Youtube/dist/youtube.response.preview.js
