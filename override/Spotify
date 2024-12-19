@@ -1,0 +1,32 @@
+name: |-
+  Spotify
+desc: |-
+  解锁会员权限
+author: |-
+  app2smile
+icon: |-
+  https://raw.githubusercontent.com/z-jinke/icon/refs/heads/main/png/spotify.png
+category: |-
+  音乐
+
+http:
+
+  mitm:
+    - "*.wg.spotify.com"
+
+  header-rewrite:
+    - >-
+      ^https:\/\/spclient\.wg\.spotify\.com\/user-customization-service\/v1\/customize$ request-del 'if-none-match'
+
+  script:
+    - match: ^https:\/\/spclient\.wg\.spotify\.com\/(bootstrap\/v1\/bootstrap|user-customization-service\/v1\/customize)$
+      name: "Spotify"
+      type: response
+      require-body: true
+      binary-mode: true
+      timeout: 60
+
+script-providers:
+  "Spotify":
+    url: https://raw.githubusercontent.com/app2smile/rules/master/js/spotify-proto.js
+    interval: 86400
