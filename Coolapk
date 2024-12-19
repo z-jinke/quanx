@@ -16,36 +16,36 @@ http:
 
   script:
     - match: ^https:\/\/api\.coolapk\.com\/v6\/main\/init
-      name: "响应修改"
+      name: "酷安"
       type: response
       require-body: true
       timeout: 60
 
     - match: ^https:\/\/api\.coolapk\.com\/v6\/main\/indexV8
-      name: "响应修改"
+      name: "酷安"
       type: response
       require-body: true
       timeout: 60
 
     - match: ^https:\/\/api\.coolapk\.com\/v6\/feed\/detail\?id
-      name: "响应修改"
+      name: "酷安"
       type: response
       require-body: true
       timeout: 60
 
     - match: ^https:\/\/api\.coolapk\.com\/v6\/page\/dataList
-      name: "响应修改"
+      name: "酷安"
       type: response
       require-body: true
       timeout: 60
 
     - match: ^https:\/\/api\.coolapk\.com\/v6\/account\/loadConfig
-      name: "响应修改"
+      name: "酷安"
       type: response
       require-body: true
       timeout: 60
 
 script-providers:
-  "响应修改":
+  "酷安":
     url: https://github.com/z-jinke/Stash/raw/refs/heads/main/beta/Coolapk.js
     interval: 86400
