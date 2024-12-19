@@ -16,11 +16,11 @@ http:
 
   script:
     - match: ^https:\/\/www\.google\.cn\/search\?
-      name: "请求修改"
+      name: "重定向"
       type: request
       timeout: 60
 
 script-providers:
-  "请求修改":
+  "重定向":
     url: https://github.com/z-jinke/Loon/raw/refs/heads/main/Script/Safari.js
     interval: 86400
