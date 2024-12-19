@@ -47,5 +47,5 @@ http:
 
 script-providers:
   "响应修改":
-    url: https://github.com/z-jinke/Loon/raw/refs/heads/main/Script/Coolapk.js
+    url: https://github.com/z-jinke/Stash/raw/refs/heads/main/beta/Coolapk.js
     interval: 86400
