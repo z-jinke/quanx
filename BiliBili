@@ -21,28 +21,25 @@ http:
       ^https:\/\/(app|api)\.bilibili\.com\/x\/(resource\/ip|vip\/ads) - reject-200
 
   script:
-
     - match: ^https:\/\/app\.bilibili\.com\/x\/v2\/splash\/list
       name: "响应修改"
       type: response
       require-body: true
       timeout: 60
 
-    
     - match: ^https:\/\/app\.bilibili\.com\/x\/v2\/feed\/index
       name: "响应修改"
       type: response
       require-body: true
       timeout: 60
 
-    
     - match: ^https:\/\/app\.bilibili\.com\/x\/resource\/show\/tab\/v2
       name: "响应修改"
       type: response
       require-body: true
       timeout: 60
 
-    - match: ^https:\/\/app\.bilibili\.com\/x\/v2\/account\/mine
+    - match: ^https:\/\/app\.bilibili\.com\/x\/v2\/account\/(mine|ipad)
       name: "响应修改"
       type: response
       require-body: true
