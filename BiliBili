@@ -14,6 +14,7 @@ http:
   mitm:
     - "app.bilibili.com"
     - "api.bilibili.com"
+    - "*.bilibili.com"
 
   url-rewrite:
     - >-
@@ -23,30 +24,30 @@ http:
 
   script:
     - match: ^https:\/\/app\.bilibili\.com\/x\/v2\/splash\/list
-      name: "响应修改_8"
+      name: "哔哩哔哩"
       type: response
       require-body: true
       timeout: 60
 
     - match: ^https:\/\/app\.bilibili\.com\/x\/v2\/feed\/index
-      name: "响应修改_8"
+      name: "哔哩哔哩"
       type: response
       require-body: true
       timeout: 60
 
     - match: ^https:\/\/app\.bilibili\.com\/x\/resource\/show\/tab\/v2
-      name: "响应修改_8"
+      name: "哔哩哔哩"
       type: response
       require-body: true
       timeout: 60
 
     - match: ^https:\/\/app\.bilibili\.com\/x\/v2\/account\/(mine|ipad)
-      name: "响应修改_8"
+      name: "哔哩哔哩"
       type: response
       require-body: true
       timeout: 60
 
 script-providers:
-  "响应修改":
+  "哔哩哔哩":
     url: https://github.com/z-jinke/Stash/raw/refs/heads/main/beta/BiliBili.js
     interval: 86400
