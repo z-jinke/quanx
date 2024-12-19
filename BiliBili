@@ -12,8 +12,7 @@ category: |-
 http:
 
   mitm:
-    - "app.bilibili.com"
-    - "api.bilibili.com"
+    - "*.bilibili.com"
 
   url-rewrite:
     - >-
