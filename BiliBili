@@ -12,7 +12,8 @@ category: |-
 http:
 
   mitm:
-    - "*.bilibili.com"
+    - "app.bilibili.com"
+    - "api.bilibili.com"
 
   url-rewrite:
     - >-
@@ -22,25 +23,25 @@ http:
 
   script:
     - match: ^https:\/\/app\.bilibili\.com\/x\/v2\/splash\/list
-      name: "响应修改"
+      name: "响应修改_8"
       type: response
       require-body: true
       timeout: 60
 
     - match: ^https:\/\/app\.bilibili\.com\/x\/v2\/feed\/index
-      name: "响应修改"
+      name: "响应修改_8"
       type: response
       require-body: true
       timeout: 60
 
     - match: ^https:\/\/app\.bilibili\.com\/x\/resource\/show\/tab\/v2
-      name: "响应修改"
+      name: "响应修改_8"
       type: response
       require-body: true
       timeout: 60
 
     - match: ^https:\/\/app\.bilibili\.com\/x\/v2\/account\/(mine|ipad)
-      name: "响应修改"
+      name: "响应修改_8"
       type: response
       require-body: true
       timeout: 60
